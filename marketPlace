@@ -1,0 +1,121 @@
+import java.util.HashMap;
+
+public class Marketplace {
+    private HashMap<String, User> users;
+    private HashMap<String, Product> products;
+
+    public Marketplace(){
+        users = new HashMap<>();
+        products = new HashMap<>();
+    }
+    public void createUser(String name, int balance){
+        name = name.toLowerCase();
+        if(users.containsKey(name)){
+            System.out.println(name + " already exists");
+            return;
+        }
+        User newUser = new User(name, balance);
+        users.put(name, newUser);
+    }
+    public void listProduct(String user,String prodName, int price){
+        prodName = prodName.toLowerCase();
+        if(!users.containsKey(user)){
+            System.out.println("Error: " + user + " does not exist");
+            return;
+        }
+        if(products.containsKey(prodName)){//do i need ignores equalscase for this?
+            //you can be like Car then another could be car and its the same thing
+            System.out.println(prodName + " already exists");
+            return;
+        }
+        user.toLowerCase();
+        User currUser = users.get(user);
+        Product newProduct = new Product(prodName, price, user);
+        currUser.addItem(newProduct);//gotta be an object
+        products.put(prodName,newProduct);
+        System.out.println("Listed " + prodName);
+    }
+    public void removeProduct(String prodName){
+        prodName = prodName.toLowerCase();
+        if(!products.containsKey(prodName)){
+            System.out.println("Error: " + prodName + " does not exist");
+            return;
+        }
+
+        Product currProduct = products.get(prodName);
+        User currUser = users.get(currProduct.getOwner());
+        products.remove(prodName);
+        currUser.removeItem(currProduct);
+
+
+    }
+    public void buyProduct(String name, String productName){
+        productName = productName.toLowerCase();
+        if (!users.containsKey(name)){
+            System.out.println("Error: " + name + " does not exist");
+            return;
+        }
+        if(!products.containsKey(productName)){
+            System.out.println("Error: " + productName + " does not exist");
+            return;
+        }
+        name = name.toLowerCase();
+        User currUser = users.get(name);
+        Product currProduct = products.get(productName);
+        if(currUser.getFunds()< currProduct.getPrice()){
+            System.out.println("Error: not enough funds");
+            return;
+        }
+        if(currProduct.getOwner().equalsIgnoreCase(name)){
+            System.out.println("Cannot buy own item");
+            return;
+        }
+        User oldOwner = users.get(currProduct.getOwner());//is this right?
+        if(oldOwner == null){
+            System.out.println("Error: Owner does not exist");
+            return;
+        }
+        //first i want to remove funds, then i need to transfer them successfully
+        currUser.setBalance(currUser.getFunds() - currProduct.getPrice());
+        oldOwner.setBalance(oldOwner.getFunds() + currProduct.getPrice());
+
+        //print new bal
+        String newOwner = currUser.getUser();
+        currProduct.setOwner(newOwner);//change ownership
+        oldOwner.removeItem(currProduct);//remove from old listing, how do i know that this will
+        //actually grab the correct item? the name isnt specific
+        currUser.addItem(currProduct);
+
+        System.out.println(newOwner + " has bought " + productName + "for $" + currProduct.getPrice());
+        System.out.println(oldOwner.getUser() + " has sold " + productName + " for $" + currProduct.getPrice());
+
+        oldOwner.addTransaction("Sold " + productName + "for $" + currProduct.getPrice());
+        currUser.addTransaction("Bought " + productName + "for $" + currProduct.getPrice());
+    }
+    public void printUser(String name){
+        name = name.toLowerCase();
+        if(!users.containsKey(name)){
+            System.out.println(name + " does not exist");
+            return;
+        }
+        User currUser = users.get(name);
+        System.out.println(currUser.getUser() + "\n Balance: " + currUser.getFunds() +
+                "\nOwns: " + currUser.getItems() + "\nTransactions: " + currUser.getTransactions());
+
+    }
+    public void printProduct(String prodName){
+        prodName = prodName.toLowerCase();
+        if(!products.containsKey(prodName)){
+            System.out.println(prodName + " does not exist");
+            return;
+        }
+        Product currProd = products.get(prodName);
+        System.out.println(prodName + "\nOwner: "+currProd.getOwner() + "\nPrice: "+
+                currProd.getPrice());
+    }
+    public void printMarketPlace(){
+        for(Product prod: products.values()){
+            System.out.println(prod.getName() + "| $"+prod.getPrice()+ "| Owner: "+ prod.getOwner());
+        }
+    }
+}
