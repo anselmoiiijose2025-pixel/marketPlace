@@ -1,0 +1,49 @@
+import java.util.ArrayList;
+
+
+public class User {
+    private String user;
+    private ArrayList<Product> items;
+    private int balance;
+    private ArrayList<String> transactions;
+
+    public User(String name, int funds){
+        this.user = name;
+        this.balance = funds;
+        this.items = new ArrayList<>();
+        this.transactions = new ArrayList<>();
+    }
+
+    public ArrayList<Product> getItems() {
+        return items;
+    }
+    public void addItem(Product theProduct){
+        items.add(theProduct);
+    }
+    public int getFunds() {
+        return balance;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+    public void removeItem(Product theProduct){
+        items.remove(theProduct);
+    }
+    public ArrayList<String> getTransactions(){
+        return transactions;
+    }
+    public void addTransaction(String action){
+        transactions.add(action);
+    }
+    @Override
+    public String toString(){
+        return "User: " + user +
+                " | Balance: $" + balance +
+                " | Items: " + items.size();
+    }
+}
