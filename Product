@@ -1,0 +1,32 @@
+public class Product {
+    private String owner;
+    private String name;
+    private int price;
+
+    public Product(String name, int price, String user){
+        this.name = name.toLowerCase();
+        this.owner = user;
+        this.price = price;
+    }
+    public int getPrice() {
+        return price;
+    }
+    public String getOwner() {
+        return owner;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner.toLowerCase();
+    }
+
+        public String toString(){
+            return "Product: " + name +
+                    " | Price: $" + price +
+                    " | Owner: " + owner;
+        }
+}
+
