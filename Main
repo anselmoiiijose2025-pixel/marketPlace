@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Marketplace mp = new Marketplace();
+
+        // ---------------------------
+        // CREATE USERS
+        // ---------------------------
+        mp.createUser("Alice", 100);
+        mp.createUser("Bob", 50);
+        mp.createUser("Charlie", 10);
+
+        mp.createUser("Alice", 200); // duplicate user
+
+        // ---------------------------
+        // LIST PRODUCTS
+        // ---------------------------
+        mp.listProduct("Alice", "Laptop", 80);
+        mp.listProduct("Alice", "Phone", 40);
+
+        mp.listProduct("Bob", "Headphones", 30);
+
+        mp.listProduct("FakeUser", "Tablet", 60); // invalid user
+
+        mp.listProduct("Alice", "Laptop", 90); // duplicate product name
+
+        // ---------------------------
+        // PRINT INITIAL STATE
+        // ---------------------------
+        mp.printUser("Alice");
+        mp.printUser("Bob");
+        mp.printUser("Charlie");
+
+        mp.printProduct("Laptop");
+        mp.printProduct("Phone");
+        mp.printProduct("Headphones");
+
+        // ---------------------------
+        // VALID PURCHASE
+        // ---------------------------
+        mp.buyProduct("Bob", "Laptop");
+
+        // ---------------------------
+        // INVALID PURCHASES
+        // ---------------------------
+        mp.buyProduct("Bob", "Laptop"); // already sold
+
+        mp.buyProduct("Charlie", "Phone"); // not enough money
+
+        mp.buyProduct("Alice", "Phone"); // buying own product
+
+        mp.buyProduct("FakeUser", "Phone"); // invalid buyer
+
+        mp.buyProduct("Bob", "Nonexistent"); // invalid product
+
+        // ---------------------------
+        // STATE AFTER PURCHASE
+        // ---------------------------
+        mp.printUser("Alice");
+        mp.printUser("Bob");
+
+        mp.printProduct("Laptop");
+
+        // ---------------------------
+        // MULTI-STEP TRANSACTIONS
+        // ---------------------------
+        mp.buyProduct("Bob", "Phone"); // Bob buys second item
+
+        mp.buyProduct("Charlie", "Headphones"); // should fail (low balance)
+
+        // ---------------------------
+        // FINAL STATE
+        // ---------------------------
+        mp.printUser("Alice");
+        mp.printUser("Bob");
+        mp.printUser("Charlie");
+
+        mp.printProduct("Phone");
+        mp.printProduct("Headphones");
+
+        // ---------------------------
+        // EDGE CASES
+        // ---------------------------
+        mp.printUser("FakeUser"); // invalid
+        mp.printProduct("GhostItem"); // invalid
+        mp.printMarketPlace();
+    }
+}
